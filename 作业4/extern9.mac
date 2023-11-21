@@ -1,0 +1,13 @@
+divdw:                                  ;解决除法溢出问题
+        push bx                         ;寄存器BX存储低16位
+	mov  bx, ax 	                ;bx=L
+	mov  ax, dx	                ;ax=H
+	mov  dx, 0 	                ;dx=0作为高16位
+	div  di                         ;双字除法
+	push ax 	                ;int(H/N)*65536入栈
+	mov  ax, bx	                ;ax=L
+	div  di                         ;双字除法
+	mov  di, dx                     ;余数,DX余数作为高16位
+	pop  dx                         ;结果的高16位
+	pop  bx                         ;寄存器BX存储低16位
+	ret                             ;过程结束

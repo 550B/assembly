@@ -1,0 +1,4 @@
+space:                                  ;存储空格
+        mov  dl, " "                    ;存入空格
+        mov  byte ptr es:[di], dl       ;写入一个字节
+        ret                             ;结束

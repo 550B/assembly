@@ -1,0 +1,13 @@
+start:
+        mov  cx, 21                     ;循环次数
+        mov  bx, data                   ;将数据段DATA的地址存储在寄存器BX中
+        mov  ds, bx                     ;将数据段寄存器DS设置为数据段的地址，这样程序可以访问数据段中的数据
+        mov  bx, table                  ;将数据段TABLE的地址存储在寄存器BX中
+        mov  es, bx                     ;将数据段TABLE的地址存储在段地址寄存器ES中
+        xor  bx, bx                     ;清零
+        xor  di, di                     ;清零
+        call row                        ;调用存储数据过程
+        mov  cx, 21                     ;循环次数
+        call display                    ;调用显示数据过程
+        mov  ah, 4ch                    ;功能号4CH:结束正在运行的程序，并返回DOS操作系统。
+        int  21h                        ;中断

@@ -1,0 +1,11 @@
+code segment
+        assume cs:code, ds:data, ss:stk
+        include extern4.mac
+        include extern5.mac
+        include extern6.mac
+        include extern7.mac
+        include extern8.mac
+        include extern9.mac
+        include extern10.mac
+code ends
+        end  start

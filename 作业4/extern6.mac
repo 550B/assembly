@@ -1,0 +1,59 @@
+display:                                ;每一行循环开始；显示数据过程
+        push cx                         ;入栈，防止过程中改变数值
+        mov  bp, cx                     ;当前次数赋值栈基址指针寄存器
+        sub  bp, 21                     ;做差，结果<=0
+        neg  bp                         ;取反，得行索引
+        mov  si, 0                      ;列索引
+        mov  ax, 10h                    ;行字节数
+        mul  bp                         ;乘行索引
+        mov  bp, ax                     ;行索引用寄存器BP存放
+;------------------01234----------------;处理第01234字节
+        mov  cx, 5                      ;做五次，包括空格
+y:                                      ;五个字节循环开始
+        mov  dx, es:[si+bp]             ;TABLE中数据给到
+        mov  ah, 2                      ;输出方式
+        int  21h                        ;中断
+        inc  si                         ;DATA下一位
+        loop y                          ;五个字节循环结束
+;------------------5678-----------------;处理第5678字节
+        mov  ax, word ptr es:[si+bp]    ;按顺序，低位给到寄存器AX
+        inc  si                         ;指针后移
+        inc  si                         ;指针后移
+        mov  dx, word ptr es:[si+bp]    ;高位给到寄存器DX
+        call show1                      ;调用显示双字过程
+;------------------9--------------------;处理第9字节
+        inc  si                         ;指针后移
+        inc  si                         ;指针后移
+        mov  dx, es:[si+bp]             ;数据给到寄存器DX
+        mov  ah, 2                      ;输出方式
+        int  21h                        ;中断
+;------------------AB-------------------;处理第AB字节
+        inc  si                         ;指针后移
+        mov  dx, word ptr es:[si+bp]    ;数据给到寄存器DX
+        call show                       ;调用显示过程
+;------------------C--------------------;处理第12字节
+        inc  si                         ;指针后移
+        inc  si                         ;指针后移
+        mov  dx, word ptr es:[si+bp]    ;数据给到寄存器DX
+        mov  ah, 2                      ;输出方式
+        int  21h                        ;中断
+;------------------DE-------------------;处理第DE字节
+        inc  si                         ;指针后移
+        mov  dx, word ptr es:[si+bp]    ;数据给到寄存器DX
+        call show                       ;调用显示过程
+;------------------F--------------------;处理第15字节
+        inc  si                         ;指针后移
+        inc  si                         ;指针后移
+        mov  dx, word ptr es:[si+bp]    ;数据给到寄存器DX
+        mov  ah, 2                      ;输出方式
+        int  21h                        ;中断
+;------------------<--------------------;输出行末尾提示符
+        mov  dx, "<"                    ;行末尾提示符
+        mov  ah, 2                      ;输出方式
+        int  21h                        ;中断
+        mov  dx, 0ah                    ;换行
+        mov  ah, 2                      ;输出方式
+        int  21h                        ;中断
+        pop  cx                         ;恢复当前循环次数
+        loop display                    ;每一行循环结束
+        ret                             ;显示数据过程结束
